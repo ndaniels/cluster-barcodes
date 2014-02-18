@@ -25,7 +25,6 @@ main = do
           
           let output = buildGraph "Barcode" nodes edges
           
-          if outName == "-" then
-            putStrLn output
-          else
-            writeFile outName output
+          if outName == "-" 
+            then putStrLn output
+            else writeFile outName output

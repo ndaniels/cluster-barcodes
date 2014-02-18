@@ -1,1 +1,10 @@
-*.hi, *.o, cluster-barcodes, *.txt
+.*swp
+*.o
+*.hi
+*.p_o
+*.prof
+tags
+TAGS
+/cluster-barcodes
+/dist
+*.txt
