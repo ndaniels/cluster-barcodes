@@ -7,3 +7,7 @@ Bases labelled 'N' and 'X' represent 'no call' and 'multiple call' respectively.
 Output is in DOT format, which can be read by Graphviz or Omnigraffle, among other tools.
 
 Usage: `cluster-barcodes input.txt output.dot`
+
+#### Build instructions
+* You must have the GHC haskell compiler. Haskell Platform is recommended.
+* From the source directory, run `cabal install`
