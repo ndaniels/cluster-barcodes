@@ -59,6 +59,16 @@ where
   mkCluster :: Sample -> Int -> Cluster
   mkCluster a n = Cluster (sampleBarcode a) 1 [sampleName a] n
                                       
+  -- mkClusters groups samples with identical barcodes into a cluster.
+  -- it relies on a hashmap, intially created with `singleton`, where a key is a
+  -- barcode and a value is a Cluster. It relies on the insertWithKey function,
+  -- which is a little complicated; the first argument to insertWithKey here is
+  -- a lambda from key, old value, new value; it ignores key and new value
+  -- and calls addToCluster to produce a new value which is the merged cluster.
+  -- the second arg to insertWithKey is the key (barcode), while the third is
+  -- the initialization for an empty hash bucket (mkCluster).
+  -- thus, mkClusters' recurses on the barcodes (b:bs) while `updating' a hash
+  -- (creating a new one based on the old one) using insertWithKey.
   mkClusters :: [Sample] -> [Cluster]
   mkClusters []     = []
   mkClusters (a:as) = H.elems $ mkClusters' (singleton (sampleBarcode a) (mkCluster a 0)) as
