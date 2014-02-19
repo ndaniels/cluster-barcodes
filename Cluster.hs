@@ -87,7 +87,7 @@ where
   
   discard :: [Cluster] -> [Cluster]
   discard = filter check
-          where check c =  ns <= 1 && xs + ns <= 6
+          where check c =  ns <= 1 && xs + ns <= 5
                         where ns = count 'N' (barcode c)
                               xs = count 'X' (barcode c)
                               count x [] = 0
