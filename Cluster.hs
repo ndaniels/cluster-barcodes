@@ -55,6 +55,13 @@ where
                     ]
                     where nearby a b = (serialNum a < serialNum b)
                                         && distNX (barcode a) (barcode b) <= 1
+                                        
+  degree :: Cluster -> [(Int, Int)] -> Int
+  degree c edges = foldl isMember 0 edges
+                 where isMember n e = if (fst e) == (serialNum c) ||
+                                         (snd e) == (serialNum c)
+                                      then n + 1
+                                      else n
                                        
   mkCluster :: Sample -> Int -> Cluster
   mkCluster a n = Cluster (sampleBarcode a) 1 [sampleName a] n
