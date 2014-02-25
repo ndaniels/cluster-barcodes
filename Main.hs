@@ -18,7 +18,8 @@ main = do
           let clusters = sortBy (comparing numSamples) $ discard $ mkClusters samples
           
           -- discard degree-1 nodes, unless they contain >1 samples.
-          let nonSingletons = filter (\c -> degree c (nearbyClusters clusters) > 1 || numSamples c > 1) clusters
+          let nonSingletons = filter (\c -> degree c (nearbyClusters clusters) >= 1 
+                                     || numSamples c > 1) clusters
           
           -- let edgePairs = nearbyClusters clusters
           
