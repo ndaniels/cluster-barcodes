@@ -1,7 +1,7 @@
 # cluster-barcodes
 #### This is a simple tool for clustering genetic barcodes associated with named samples.
 
-It assumes an input file which is tab-delimited, whose first fiend contains a 
+It assumes an input file which is tab-delimited, whose first field contains a 
 sample identifier and whose second field contains a genetic barcode.
 Bases labelled 'N' and 'X' represent 'no call' and 'multiple call' respectively.
 
