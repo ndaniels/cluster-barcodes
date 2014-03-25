@@ -8,18 +8,20 @@ where
   import Sample
   
   
-  data Cluster = Cluster { barcode    :: Barcode
-                         , numSamples :: Int
-                         , samples    :: [String]
-                         , serialNum  :: Int
+  data Cluster = Cluster { barcode     :: Barcode
+                         , numSamples  :: Int
+                         , samples     :: [String]
+                         , serialNum   :: Int
+                         , clusterYear :: Int
                          }
                          deriving Show
                          
   addToCluster :: String -> Cluster -> Cluster
-  addToCluster name cluster = Cluster { barcode    = barcode cluster
-                                      , numSamples = numSamples cluster + 1
-                                      , samples    = name:(samples cluster)
-                                      , serialNum  = serialNum cluster
+  addToCluster name cluster = Cluster { barcode     = barcode cluster
+                                      , numSamples  = numSamples cluster + 1
+                                      , samples     = name:(samples cluster)
+                                      , serialNum   = serialNum cluster
+                                      , clusterYear = clusterYear cluster
                                       }
 
   clusterColor :: Cluster -> String
@@ -38,7 +40,8 @@ where
                       fmtLine things = (intersperse " " things) ++ ["\n"]
   
   clusterLabel :: Cluster -> String
-  clusterLabel n = barcode n ++ "\nsamples: " ++ (show $ numSamples n) ++ "\n" ++
+  clusterLabel n = (show $ clusterYear n) ++ " " ++ barcode n ++ "\nsamples: " 
+                   ++ (show $ numSamples n) ++ "\n" ++
                    clusterMembers n
   
   clusterToNode :: Cluster -> (Int, String)
@@ -62,9 +65,24 @@ where
                                          (snd e) == (serialNum c)
                                       then n + 1
                                       else n
+               
+  dateClusters :: [Cluster] -> [(Int, Int)]
+  dateClusters cs = [ (serialNum i, serialNum j)
+                    | i <- cs
+                    , j <- cs
+                    , precedes i j cs
+                    , shouldCluster i j
+                    ]
+                    where precedes :: Cluster -> Cluster -> [Cluster] -> Bool
+                          precedes a b xs = (clusterYear a < clusterYear b)
+                                            && (not $ any (\d -> isBetween a b d) xs)
+                          isBetween a' b' d' = 
+                               clusterYear a' < clusterYear d' 
+                            && clusterYear b' > clusterYear d'
+                          shouldCluster a b = dist2 (barcode a) (barcode b) == 0
                                        
-  mkCluster :: Sample -> Int -> Cluster
-  mkCluster a n = Cluster (sampleBarcode a) 1 [sampleName a] n
+  mkCluster :: (Sample -> String) -> Sample -> Int -> Cluster
+  mkCluster key a n = Cluster (sampleBarcode a) 1 [sampleName a] n (sampleYear a)
                                       
   -- mkClusters groups samples with identical barcodes into a cluster.
   -- it relies on a hashmap, intially created with `singleton`, where a key is a
@@ -76,17 +94,17 @@ where
   -- the initialization for an empty hash bucket (mkCluster).
   -- thus, mkClusters' recurses on the barcodes (b:bs) while `updating' a hash
   -- (creating a new one based on the old one) using insertWithKey.
-  mkClusters :: [Sample] -> [Cluster]
-  mkClusters []     = []
-  mkClusters (a:as) = H.elems $ mkClusters' (singleton (sampleBarcode a) (mkCluster a 0)) as
-                    where mkClusters' h (b:bs) = mkClusters' (insertWithKey
-                                                  (\k n o -> addToCluster
-                                                    (sampleName b) o) 
-                                                  (sampleBarcode b) 
-                                                  (mkCluster b (size h))
-                                                  h)
-                                                 bs
-                          mkClusters' h [] = h
+  mkClusters :: (Sample -> String) -> [Sample] -> [Cluster]
+  mkClusters _ []     = []
+  mkClusters key (a:as) = H.elems $ mkClusters' (singleton (key a) (mkCluster key a 0)) as
+                        where mkClusters' h (b:bs) = mkClusters' (insertWithKey
+                                                      (\k n o -> addToCluster
+                                                        (sampleName b) o) 
+                                                      (key b) 
+                                                      (mkCluster key b (size h))
+                                                      h)
+                                                     bs
+                              mkClusters' h [] = h
   
                                       
   cDist :: Cluster -> Cluster -> Int
