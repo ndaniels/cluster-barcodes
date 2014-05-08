@@ -81,7 +81,8 @@ where
                           isBetween a' b' d' = 
                                clusterYear a' < clusterYear d' 
                             && clusterYear b' > clusterYear d'
-                            && shouldCluster a' b'
+                            && shouldCluster a' d'
+                            && shouldCluster b' d'
                           shouldCluster a b = dist2 (barcode a) (barcode b) == 0
                                        
   mkCluster :: (Sample -> String) -> Sample -> Int -> Cluster
