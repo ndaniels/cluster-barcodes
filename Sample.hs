@@ -14,5 +14,4 @@ where
                    mkSample' (a:rest)   = error "Invalid line"
                    mkSample' []         = error "Invalid line"
                    getYear :: String -> Int
-                   -- aren't we done with Y2K bugs?
                    getYear s' = (read $ ((splitOn "." s') !! 1))

@@ -12,7 +12,7 @@ Clusters are based on exact barcode matches; each node in the graph represents
 a set of samples with identical barcodes. Nodes with ambiguous (containing 'X' 
 or 'N') barcodes are colored red. Barcodes with >1 'N' or >5 ('X' + 'N') are 
 dropped. Edges are drawn between nodes whose barcodes have a Hamming distance of
-exactly 1 ('N' and 'X' entries do not count towards Hamming distance).
+exactly 1 ('N' and 'X' entries *do* count towards Hamming distance).
 
 Usage: `cluster-barcodes input.txt output.dot`
 

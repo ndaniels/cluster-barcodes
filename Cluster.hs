@@ -74,8 +74,10 @@ where
                     , shouldCluster i j
                     ]
                     where precedes :: Cluster -> Cluster -> [Cluster] -> Bool
-                          precedes a b xs = (clusterYear a < clusterYear b)
-                                            && (not $ any (\d -> isBetween a b d) xs)
+                    -- given clusters a and b, and list of clusters xs,
+                    -- if a preceds b in xs, return true
+                          precedes a b xs = (clusterYear a < clusterYear b) &&
+                                            (not $ any (\d -> isBetween a b d) xs)
                           isBetween a' b' d' = 
                                clusterYear a' < clusterYear d' 
                             && clusterYear b' > clusterYear d'
@@ -129,14 +131,3 @@ where
                               count x (a:as) = if x == a 
                                                then 1 + count x as
                                                else count x as
-  
-  -- hash on non-X/N-containing barcodes
-  -- for X/N-containing barcodes, add to ALL matching clusters
-  -- as possible matches!
-  -- new fields for Cluster: numMaybeSamples, maybeSamples
-  -- other funcs for Cluster: numAllSamples, allSamples
-  
-  -- new approach: first cluster only on non-X/N-containing barcodes
-  -- then, drop barcodes with too many Xs or Ns
-  -- then, add 'nearby' barcodes to clusters they might match
-  -- compute neighboring clusters; create graph
