@@ -14,7 +14,10 @@ or 'N') barcodes are colored red. Barcodes with >1 'N' or >5 ('X' + 'N') are
 dropped. Edges are drawn between nodes whose barcodes have a Hamming distance of
 exactly 1 ('N' and 'X' entries *do* count towards Hamming distance).
 
-Usage: `cluster-barcodes input.txt output.dot`
+Two kinds of clusters are possible: by barcode (-c option), and by barcode/year 
+(-l option, longitudinal clustering).
+
+Usage: `cluster-barcodes [-l|-c] input.txt output.dot`
 
 #### Build instructions
 * You must have the GHC haskell compiler. Haskell Platform is recommended.
