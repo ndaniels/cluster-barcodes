@@ -8,6 +8,7 @@ import Data.Ord
 import Sample
 import Cluster
 import Graph
+import Util
 
 main :: IO ()
 
@@ -18,7 +19,7 @@ main = do
             else return ()
           let longitudinal = if runType == "-l" then True else False
           f <- readFile inName
-          let samples = map mkSample $ lines f
+          let samples = map mkSample $ splitLines f
           
           let clusters = if longitudinal then
                             sortBy (comparing numSamples) $ discard $ 

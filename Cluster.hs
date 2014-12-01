@@ -3,6 +3,7 @@ where
   import Data.HashMap as H hiding (filter, map)
   import Data.List (find, sortBy, intersperse)
   import Data.Ord
+  import Data.List
   import Data.List.Split
   import Barcode
   import Sample
@@ -14,7 +15,7 @@ where
                          , serialNum   :: Int
                          , clusterYear :: Int
                          }
-                         deriving Show
+                         deriving (Show, Eq)
                          
   addToCluster :: String -> Cluster -> Cluster
   addToCluster name cluster = Cluster { barcode     = barcode cluster
@@ -84,6 +85,24 @@ where
                             && shouldCluster a' d'
                             && shouldCluster b' d'
                           shouldCluster a b = dist2 (barcode a) (barcode b) == 0
+                          
+  dateClusterNodes :: [Cluster] -> [(Int, Int)] -> ([[Cluster]], [[(Int,Int)]])
+  dateClusterNodes cs es = (cgroups, egroups)
+                           where cgroups = subgraphs cs es
+                                 egroups = subgraphEdges cs es
+                                 
+  subgraphs (c:cs) es = [thisGraph] ++ 
+                        subgraphs (cs Data.List.\\ thisGraph) es
+                        where thisGraph = c : [ x | x <- cs, connectedTo x c es]
+
+  connectedTo :: Cluster -> Cluster -> [(Int,Int)] -> Bool
+  connectedTo n m es = connectedTo' (serialNum n) (serialNum m) es
+                       where connectedTo' x y es = undefined
+                         
+-- duh, every node in a subgraph shares the same barcode.
+-- group by this.
+  
+  subgraphEdges (c:cs) es = undefined
                                        
   mkCluster :: (Sample -> String) -> Sample -> Int -> Cluster
   mkCluster key a n = Cluster (sampleBarcode a) 1 [sampleName a] n (sampleYear a)
