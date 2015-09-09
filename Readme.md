@@ -17,10 +17,12 @@ exactly 1 ('N' and 'X' entries do not count towards Hamming distance).
 Two kinds of clusters are possible: by barcode (-c option), and by barcode/year 
 (-l option, longitudinal clustering).
 
+Barcode clustering can also be run with weighted edges (-w option). Currently this is hardcoded to a threshold of 3.
+
 In longitudinal clustering, 'N' and 'X' entries DO count towards Hamming
 distance.
 
-Usage: `cluster-barcodes [-l|-c] input.txt output.dot`
+Usage: `cluster-barcodes [-l|-c|-w] input.txt output.dot`
 
 #### Build instructions
 * You must have the GHC haskell compiler. Haskell Platform is recommended.

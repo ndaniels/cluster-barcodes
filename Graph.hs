@@ -18,6 +18,9 @@ where
   
   mkGraphEdge :: (Int,Int) -> String
   mkGraphEdge (a,b) = show a ++ " -- " ++ show b ++ ";\n"
+  
+  mkGraphEdgeWeighted :: (Int,Int,Int) -> String
+  mkGraphEdgeWeighted (a,b,w) = show a ++ " -- " ++ show b ++ " [weight=" ++ show w ++"];\n"
     
   mkGraph :: String -> [String] -> String
   mkGraph title ls = "graph " ++ title ++ " {\n" ++

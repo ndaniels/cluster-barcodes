@@ -14,10 +14,11 @@ main :: IO ()
 
 main = do
           [runType,inName,outName] <- getArgs >>= return . take 3
-          if runType /= "-l" && runType /= "-c" 
-            then putStrLn "Specify -l (longitudinal) or -c" >> exitFailure
+          if runType /= "-l" && runType /= "-c" && runType /= "-w" 
+            then putStrLn "Specify -l (longitudinal), -w (weighted) or -c" >> exitFailure
             else return ()
           let longitudinal = if runType == "-l" then True else False
+          let weighted = if runType == "-w" then True else False
           f <- readFile inName
           let samples = map mkSample $ splitLines f
           
@@ -42,6 +43,17 @@ main = do
               if outName == "-" 
                 then putStrLn output
                 else writeFile outName output
+            else if weighted
+              then do
+                let nonSingletons = filter (\c -> degree c (nearbyClusters clusters) >= 1 
+                                           || numSamples c > 1) clusters
+                let edgePairs = nearbyClustersWeighted nonSingletons 3
+                let edgeStrings = map mkGraphEdgeWeighted edgePairs
+                let nodeStrings = map mkGraphNode nonSingletons
+                let output = buildGraph "Barcode" nodeStrings edgeStrings
+                if outName == "-" 
+                  then putStrLn output
+                  else writeFile outName output  
             else do
               -- discard degree-0 nodes, unless they contain >1 samples.
               let nonSingletons = filter (\c -> degree c (nearbyClusters clusters) >= 1 

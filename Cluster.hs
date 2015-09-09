@@ -59,6 +59,16 @@ where
                     ]
                     where nearby a b = (serialNum a < serialNum b)
                                         && distNX (barcode a) (barcode b) <= 1
+
+  nearbyClustersWeighted :: [Cluster] -> Int -> [(Int, Int, Int)]
+  nearbyClustersWeighted cs t = [ (serialNum i, serialNum j, distNX (barcode i) (barcode j))
+                              | i <- cs
+                              , j <- cs
+                              , nearby i j
+                              ]
+                              where nearby a b = (serialNum a < serialNum b)
+                                                  && distNX (barcode a) (barcode b) <= t
+
                                         
   degree :: Cluster -> [(Int, Int)] -> Int
   degree c edges = foldl isMember 0 edges
