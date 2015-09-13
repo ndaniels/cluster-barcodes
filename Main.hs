@@ -20,7 +20,10 @@ main = do
           let longitudinal = if runType == "-l" then True else False
           let weighted = if runType == "-w" then True else False
           f <- readFile inName
-          let samples = map mkSample $ splitLines f
+          let samples = if longitudinal then
+                           map mkSampleYear $ splitLines f
+                        else
+                           map mkSample $ splitLines f
           
           let clusters = if longitudinal then
                             sortBy (comparing numSamples) $ discard $ 
