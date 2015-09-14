@@ -9,6 +9,17 @@ import Sample
 import Cluster
 import Graph
 import Util
+import Options.Applicative
+import Debug.Trace
+
+data Args = Args
+  { longitudinal :: Bool
+  , simple       :: Bool 
+  , weighted     :: Bool
+  , inFile       :: String
+  , outFile      :: String
+  , threshold    :: Int
+  }
 
 main :: IO ()
 
