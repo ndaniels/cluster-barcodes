@@ -62,9 +62,9 @@ main = do
                 let nonSingletons = filter (\c -> degree c (nearbyClusters clusters) >= 1 
                                            || numSamples c > 1) clusters
                 let edgePairs = nearbyClustersWeighted nonSingletons 3
-                let edgeStrings = map mkGraphEdgeWeighted edgePairs
-                let nodeStrings = map mkGraphNode nonSingletons
-                let output = buildGraph "Barcode" nodeStrings edgeStrings
+                let edgeStrings = map mkCytoEdgeWeighted edgePairs
+                let nodeStrings = map mkCytoNode nonSingletons
+                let output = buildCyto "Barcode" nodeStrings edgeStrings
                 if outName == "-" 
                   then putStrLn output
                   else writeFile outName output  

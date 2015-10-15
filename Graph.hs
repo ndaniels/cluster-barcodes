@@ -16,11 +16,21 @@ where
                             color = clusterColor c
                             ident = show $ serialNum c
   
+  mkCytoNode :: Cluster -> String
+  mkCytoNode c = (printf
+                    "%s,%d,\"%s\"" ident size label)
+                    where ident = show $ serialNum c
+                          size  = celing $ sqrt $ fromIntegral $ numSamples c :: Int
+                          label = clusterLabel c
+  
   mkGraphEdge :: (Int,Int) -> String
   mkGraphEdge (a,b) = show a ++ " -- " ++ show b ++ ";\n"
   
   mkGraphEdgeWeighted :: (Int,Int,Int) -> String
   mkGraphEdgeWeighted (a,b,w) = show a ++ " -- " ++ show b ++ " [penwidth=" ++ show (4 - w) ++", label=" ++ show w ++"];\n"
+    
+  mkCytoEdgeWeighted :: (Int,Int,Int) -> String
+  mkCytoEdgeWeighted (a,b,w) = show a ++ "," ++ show b ++ "," ++ show w
     
   mkGraph :: String -> [String] -> String
   mkGraph title ls = "graph " ++ title ++ " {\n" ++
