@@ -20,7 +20,7 @@ where
   mkCytoNode c = (printf
                     "%s,%d,\"%s\"" ident size label)
                     where ident = show $ serialNum c
-                          size  = celing $ sqrt $ fromIntegral $ numSamples c :: Int
+                          size  = ceiling $ sqrt $ fromIntegral $ numSamples c :: Int
                           label = clusterLabel c
   
   mkGraphEdge :: (Int,Int) -> String
@@ -45,6 +45,9 @@ where
   
   mkLGraph :: String -> [String] -> String
   mkLGraph = undefined
+  
+  buildCyto :: [String] -> [String] -> String
+  buildCyto nodes edges = (concat $ intersperse "\n" (nodes ++ edges))
     --
   -- let nonSingletons = filter (\c -> degree c (dateClusters clusters) >= 1) clusters
   -- let edgePairs = dateClusters nonSingletons

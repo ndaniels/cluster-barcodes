@@ -64,7 +64,7 @@ main = do
                 let edgePairs = nearbyClustersWeighted nonSingletons 3
                 let edgeStrings = map mkCytoEdgeWeighted edgePairs
                 let nodeStrings = map mkCytoNode nonSingletons
-                let output = buildCyto "Barcode" nodeStrings edgeStrings
+                let output = buildCyto nodeStrings edgeStrings
                 if outName == "-" 
                   then putStrLn output
                   else writeFile outName output  
