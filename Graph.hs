@@ -30,7 +30,7 @@ where
   mkGraphEdgeWeighted (a,b,w) = show a ++ " -- " ++ show b ++ " [penwidth=" ++ show (4 - w) ++", label=" ++ show w ++"];\n"
     
   mkCytoEdgeWeighted :: (Int,Int,Int) -> String
-  mkCytoEdgeWeighted (a,b,w) = show a ++ "," ++ show b ++ "," ++ show w
+  mkCytoEdgeWeighted (a,b,w) = show a ++ " (edge) " ++ show b ++ "," ++ show w
     
   mkGraph :: String -> [String] -> String
   mkGraph title ls = "graph " ++ title ++ " {\n" ++
