@@ -82,8 +82,8 @@ where
   dateClusters cs = [ (serialNum i, serialNum j)
                     | i <- cs
                     , j <- cs
-                    , precedes i j cs
                     , shouldCluster i j
+                    , precedes i j cs
                     ]
                     where precedes :: Cluster -> Cluster -> [Cluster] -> Bool
                     -- given clusters a and b, and list of clusters xs,
@@ -95,7 +95,7 @@ where
                             && clusterYear b' > clusterYear d'
                             && shouldCluster a' d'
                             && shouldCluster b' d'
-                          shouldCluster a b = dist2 (barcode a) (barcode b) == 0
+                          shouldCluster a b = (barcode a) == (barcode b) --dist (barcode a) (barcode b) == 0
                           
   dateClusterNodes :: [Cluster] -> [(Int, Int)] -> ([[Cluster]], [[(Int,Int)]])
   dateClusterNodes cs es = (cgroups, egroups)

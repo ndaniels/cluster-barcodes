@@ -45,6 +45,7 @@ main = do
                             sortBy (comparing numSamples) $ discard $ 
                               mkClusters 
                               sampleBarcode samples
+                              
           if longitudinal 
             then do
               -- discard degree-0 nodes
