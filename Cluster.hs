@@ -42,9 +42,11 @@ where
   
   clusterLabel :: Cluster -> String
   clusterLabel n = barcode n
-  -- clusterLabel n = (show $ clusterYear n) ++ " " ++ barcode n ++ "\nsamples: "
-  --                  ++ (show $ numSamples n) ++ "\n" ++
-  --                  clusterMembers n
+  
+  fullClusterLabel :: Cluster -> String
+  fullClusterLabel n = (show $ clusterYear n) ++ " " ++ barcode n ++ "\nsamples: "
+                       ++ (show $ numSamples n) ++ "\n" ++
+                       clusterMembers n
   
   clusterToNode :: Cluster -> (Int, String)
   clusterToNode n = (serialNum n, clusterLabel n)

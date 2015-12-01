@@ -12,7 +12,7 @@ where
                       "node [shape=circle, width=%d, label=\"%s\", color=\"%s\"]; %s;\n" 
                        size label color ident)
                       where size = ceiling $ sqrt $ fromIntegral $ numSamples c :: Int
-                            label = clusterLabel c
+                            label = fullClusterLabel c
                             color = clusterColor c
                             ident = show $ serialNum c
   
