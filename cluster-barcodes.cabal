@@ -32,7 +32,8 @@ Extra-source-files: *.hs
 
 Executable cluster-barcodes
   Main-is: Main.hs
-  ghc-options:         -O2
+  ghc-options:         -O2 -threaded -rtsopts
+  other-modules: Barcode Cluster Graph Sample Util
   
   -- Packages needed in order to build this package.
   Build-depends: base >= 4.0,
