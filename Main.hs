@@ -11,6 +11,7 @@ import Graph
 import Util
 import Options.Applicative
 import Debug.Trace
+import Control.Parallel.Strategies
 
 data Args = Args
   { longitudinal :: Bool
@@ -32,9 +33,9 @@ main = do
           let weighted = if runType == "-w" then True else False
           f <- readFile inName
           let samples = if longitudinal then
-                           map mkSampleYear $ splitLines f
+                           parMap rseq mkSampleYear $ splitLines f
                         else
-                           map mkSample $ splitLines f
+                           parMap rseq mkSample $ splitLines f
           
           let clusters = if longitudinal then
                             sortBy (comparing numSamples) $ discard $ 
@@ -51,8 +52,8 @@ main = do
               -- discard degree-0 nodes
               let nonSingletons = filter (\c -> degree c (dateClusters clusters) >= 1) clusters
               let edgePairs = dateClusters nonSingletons
-              let edgeStrings = map mkGraphEdge edgePairs
-              let nodeStrings = map mkGraphNode nonSingletons
+              let edgeStrings = parMap rseq mkGraphEdge edgePairs
+              let nodeStrings = parMap rseq mkGraphNode nonSingletons
               let output = buildGraph "Barcodes" nodeStrings edgeStrings
               -- draw edges between adjacent ones.
               if outName == "-" 
@@ -63,8 +64,8 @@ main = do
                 let nonSingletons = filter (\c -> degree c (nearbyClusters clusters) >= 1 
                                            || numSamples c > 1) clusters
                 let edgePairs = nearbyClustersWeighted nonSingletons 3
-                let edgeStrings = map mkCytoEdgeWeighted edgePairs
-                let nodeStrings = map mkCytoNode nonSingletons
+                let edgeStrings = parMap rseq mkCytoEdgeWeighted edgePairs
+                let nodeStrings = parMap rseq mkCytoNode nonSingletons
                 let output = buildCyto nodeStrings edgeStrings
                 if outName == "-" 
                   then putStrLn output
@@ -74,8 +75,8 @@ main = do
               let nonSingletons = filter (\c -> degree c (nearbyClusters clusters) >= 1 
                                          || numSamples c > 1) clusters
               let edgePairs = nearbyClusters nonSingletons  
-              let edgeStrings = map mkGraphEdge edgePairs
-              let nodeStrings = map mkGraphNode nonSingletons
+              let edgeStrings = parMap rseq mkGraphEdge edgePairs
+              let nodeStrings = parMap rseq mkGraphNode nonSingletons
               let output = buildGraph "Barcode" nodeStrings edgeStrings
               if outName == "-" 
                 then putStrLn output
